@@ -1,3 +1,4 @@
+"data.tf" 13L, 202B                                                                              1,31          All
 data "aws_ami" "amazonlinux2" {
   most_recent = true
 

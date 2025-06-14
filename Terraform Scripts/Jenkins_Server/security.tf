@@ -1,23 +1,30 @@
 # Create Security Group - SSH Traffic and other ports
-resource "aws_security_group" "web-traffic" {
-  name = "My_Security_Group1"
+resource "aws_security_group" "web_traffic" {
+  name        = "My_Security_Group1"
+  description = "Allow web and SSH traffic"
+  vpc_id      = var.vpc_id # Make sure you define this variable or hardcode if needed
 
-  ingress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.ingressrules
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "egress" {
+    for_each = var.egressrules
+    content {
+      from_port   = egress.value
+      to_port     = egress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    }
   }
-
 
   tags = {
-    "Name" = "My_SG1"
+    Name = "My_SG1"
   }
 }
